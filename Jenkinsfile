@@ -17,7 +17,7 @@ node {
 
         stage('Sonar Check') 
         sh '''mvn sonar:sonar \
-                -Dsonar.host.url=http://10.0.2.15:9000 \
+                -Dsonar.host.url=http://sonar:9000 \
                 -Dsonar.login=admin \
                 -Dsonar.password=admin'''
 
