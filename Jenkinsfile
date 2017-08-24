@@ -18,8 +18,7 @@ node {
         }
         
         stage('Dependency Check') {
-          //sh 'mvn org.owasp:dependency-check-maven:2.1.0:check'
-          echo 'dummy'
+          sh 'mvn org.owasp:dependency-check-maven:2.1.0:check'
         }
 
         stage('Sonar Check') {
