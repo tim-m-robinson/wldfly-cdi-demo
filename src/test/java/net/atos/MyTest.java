@@ -41,7 +41,7 @@ public class MyTest {
     
     @Deployment
     public static WebArchive createDeployment() {
-        final WebArchive archive = ShrinkWrap.create(WebArchive.class, "camel-tests.war");
+        final WebArchive archive = ShrinkWrap.create(WebArchive.class, "wldfly-cdi-demo.war");
         archive.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         archive.addPackage(MyRouteBuilder.class.getPackage());
         return archive;

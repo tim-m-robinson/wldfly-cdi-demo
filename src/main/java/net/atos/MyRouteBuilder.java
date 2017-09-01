@@ -32,23 +32,17 @@ public class MyRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-    	restConfiguration()
-    		.component("servlet")
-    		//.contextPath("/camel")
-    		//.host("localhost")
-    		//.port(8080)
-    		.bindingMode(RestBindingMode.json);
-    		//.endpointProperty("servletName", "CamelServlet");
+        restConfiguration()
+            .component("servlet")
+      	    .bindingMode(RestBindingMode.json);
 
-    	
     	rest("/foo")
-    		.get()
-    			.to("direct:start");
-    	
-    	
-    	from("direct:start")
-    		.transform()
-				.simple("${in.header.name}")
-    		.bean("helloBean");
+            .get()
+                .to("direct:start");
+
+        from("direct:start")
+            .transform()
+                .simple("${in.header.name}")
+            .bean("helloBean");
     }
 }
