@@ -2,12 +2,18 @@ node {
     stage('Prep') {
         deleteDir()
         git url: 'https://github.com/tim-m-robinson/wldfly-cdi-demo.git'
+        // capture GID of Docker group
+        env.DOCKER_GID = sh (
+            script: 'ls -la /var/run/docker.sock|cut -d" " -f4',
+            returnStdout: true
+        ).trim()
+        echo "Docker GID: ${DOCKER_GID}"
     }
     // Maven build steps
     withDockerContainer(image: 'maven:3-jdk-8',
           args: '''--network="citools" 
                    -v /var/run/docker.sock:/var/run/docker.sock
-                   --group-add 994''') {
+                   --group-add ${DOCKER_GID}''') {
 
         stage('Build') {
           sh 'mvn -B compile'
