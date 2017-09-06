@@ -2,6 +2,12 @@ node {
     stage('Prep') {
         deleteDir()
         git url: 'https://github.com/tim-m-robinson/wldfly-cdi-demo.git'
+        
+        // set BUILD_TIMESTAMP
+        def now = new Date()
+        env.BUILD_TIMESTAMP = now.format("yyyyMMdd-HHmmss", TimeZone.getTimeZone('UTC'))
+        echo "${BUILD_TIMESTAMP}"
+    
         // capture GID of Docker group
         env.DOCKER_GID = sh (
             script: 'ls -la /var/run/docker.sock|cut -d" " -f4',
@@ -28,7 +34,7 @@ node {
         }
 
         stage('Sonar Check') {
-          sh '''mvn sonar:sonar \
+          sh '''mvn -B sonar:sonar \
                 -Dsonar.host.url=http://sonar:9000 \
                 -Dsonar.login=admin \
                 -Dsonar.password=admin'''
@@ -39,10 +45,14 @@ node {
         }
 
         stage('Containerise') {
-          sh 'mvn docker:build'
+          sh 'mvn -B docker:build'
         }
     }
+    
     stage('Release') {
-        //
+        withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
+          sh '''curl -v -u $USERPASS --upload-file target/wldfly-cdi-demo.war \
+                     http://nexus:8081/repository/maven-snapshots/net/atos/wldfly-cdi-demo/${BUILD_TIMESTAMP}-SNAPSHOT/wldfly-cdi-demo-${BUILD_TIMESTAMP}-SNAPSHOT.war'''
+        }
     }
 }
