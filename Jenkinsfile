@@ -52,10 +52,17 @@ node {
         }
     }
     
-    stage('Release') {
+    stage('Publish WAR') {
         withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
             sh '''curl -v -u ${USERPASS} --upload-file target/wldfly-cdi-demo.war \
                      http://nexus:8081/repository/maven-snapshots/net/atos/wldfly-cdi-demo/${BUILD_TIMESTAMP}-SNAPSHOT/wldfly-cdi-demo-${BUILD_TIMESTAMP}-SNAPSHOT.war'''
+        }
+    }
+
+    stage('Publish Image') {
+        def img = docker.image('wildfly-cdi-demo:1.0-SNAPSHOT');
+        withDockerRegistry([credentialsId: 'nexus', url: '52.37.226.128:2375']) {
+          img push();
         }
     }
 }
