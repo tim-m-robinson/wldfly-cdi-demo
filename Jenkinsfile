@@ -64,7 +64,7 @@ node {
 
     stage('Publish Image') {
         def img = docker.image('wldfly-cdi-demo:1.0-SNAPSHOT');
-        docker.withRegistry(credentialsId: 'nexus', url: 'http://nexus:2375') {
+        docker.withRegistry('http://nexus:2375', 'nexus') {
           img.push();
         }
     }
