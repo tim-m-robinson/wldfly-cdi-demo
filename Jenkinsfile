@@ -2,7 +2,10 @@ node {
     stage('Prep') {
         deleteDir()
         git url: 'https://github.com/tim-m-robinson/wldfly-cdi-demo.git'
-        
+
+        // read project details from pom.xml
+        def pom = readMavenPom
+
         // set BUILD_TIMESTAMP
         def now = new Date()
         env.BUILD_TIMESTAMP = now.format("yyyyMMdd-HHmmss", TimeZone.getTimeZone('UTC'))
@@ -62,7 +65,7 @@ node {
     stage('Publish Image') {
         def img = docker.image('wildfly-cdi-demo:1.0-SNAPSHOT');
         withDockerRegistry([credentialsId: 'nexus', url: 'http://52.37.226.128:2375']) {
-          img push();
+          img.push();
         }
     }
 }
