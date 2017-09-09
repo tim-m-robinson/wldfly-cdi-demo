@@ -4,7 +4,7 @@ node {
         git url: 'https://github.com/tim-m-robinson/wldfly-cdi-demo.git'
 
         // read project details from pom.xml
-        def pom = readMavenPom
+        def pom = readMavenPom file: 'pom.xml'
 
         // set BUILD_TIMESTAMP
         def now = new Date()
