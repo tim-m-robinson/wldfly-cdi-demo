@@ -63,7 +63,7 @@ node {
     }
 
     stage('Publish Image') {
-        def img = docker.image('wildfly-cdi-demo:1.0-SNAPSHOT');
+        def img = docker.image('wldfly-cdi-demo:1.0-SNAPSHOT');
         withDockerRegistry([credentialsId: 'nexus', url: 'http://52.37.226.128:2375']) {
           img.push();
         }
