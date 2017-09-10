@@ -1,237 +1,245 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.atos</groupId>
-    <artifactId>wldfly-cdi-demo</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+  <groupId>net.atos</groupId>
+  <artifactId>wldfly-cdi-demo</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
 
-    <name>WildFly Camel CDI Application</name>
+  <name>WildFly Camel CDI Application</name>
 
-    <!-- Properties -->
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  <!-- Properties -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- WildFly versions -->
-        <version.wildfly>10.1.0.Final</version.wildfly>
-        <version.wildfly.arquillian>1.0.2.Final</version.wildfly.arquillian>
+    <!-- WildFly versions -->
+    <version.wildfly>10.1.0.Final</version.wildfly>
+    <version.wildfly.arquillian>1.0.2.Final</version.wildfly.arquillian>
 
-        <!-- Other versions -->
-        <version.apache.camel>2.19.2</version.apache.camel>
-        <version.jboss.arquillian>1.1.10.Final</version.jboss.arquillian>
-        <version.junit>4.12</version.junit>
+    <!-- Other versions -->
+    <version.apache.camel>2.19.2</version.apache.camel>
+    <version.jboss.arquillian>1.1.10.Final</version.jboss.arquillian>
+    <version.junit>4.12</version.junit>
 
-        <!-- Plugin versions -->
-        <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
-        <version.maven.surefire.plugin>2.18.1</version.maven.surefire.plugin>
-        <version.maven.war.plugin>3.0.0</version.maven.war.plugin>
-        <version.wildfly.maven.plugin>1.2.0.Alpha6</version.wildfly.maven.plugin>
-        <version.docker.maven.plugin>0.21.0</version.docker.maven.plugin>
+    <!-- Plugin versions -->
+    <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
+    <version.maven.surefire.plugin>2.18.1</version.maven.surefire.plugin>
+    <version.maven.war.plugin>3.0.0</version.maven.war.plugin>
+    <version.wildfly.maven.plugin>1.2.0.Alpha6</version.wildfly.maven.plugin>
+    <version.docker.maven.plugin>0.21.0</version.docker.maven.plugin>
 
-        <!-- maven-compiler-plugin -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- maven-compiler-plugin -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- Arquillian application server properties -->
-        <jboss.home>${env.JBOSS_HOME}</jboss.home>
-        <server.config>standalone.xml</server.config>
-    </properties>
+    <!-- Arquillian application server properties -->
+    <jboss.home>${env.JBOSS_HOME}</jboss.home>
+    <server.config>standalone.xml</server.config>
+  </properties>
 
-    <!-- DependencyManagement -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <scope>import</scope>
-                <type>pom</type>
-                <version>${version.jboss.arquillian}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-parent</artifactId>
-                <version>${version.wildfly}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <!-- Dependencies -->
+  <!-- DependencyManagement -->
+  <dependencyManagement>
     <dependencies>
-        <!-- NOT Provided -->  
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jackson</artifactId>
-            <version>${version.apache.camel}</version>
-        </dependency>         
-        <!-- Provided -->       
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cdi</artifactId>
-            <version>${version.apache.camel}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <scope>provided</scope> 
-        </dependency>
-
-        <!-- Test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${version.jboss.arquillian}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-parent</artifactId>
+        <version>${version.wildfly}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <!-- Build-->
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
+  <!-- Dependencies -->
+  <dependencies>
+    <!-- NOT Provided -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-jackson</artifactId>
+      <version>${version.apache.camel}</version>
+    </dependency>
+    <!-- Provided -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-cdi</artifactId>
+      <version>${version.apache.camel}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.servlet</groupId>
+      <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson-provider</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <!-- Build-->
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.maven.compiler.plugin}</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${version.maven.war.plugin}</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>${version.wildfly.maven.plugin}</version>
+        <configuration>
+          <version>${version.wildfly}</version>
+          <serverConfig>${server.config}</serverConfig>
+          <!--
+          <username>foo</username>
+          <password>bar</password>
+          -->
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${version.docker.maven.plugin}</version>
+        <configuration>
+          <images>
+            <image>
+              <name>${project.artifactId}:${project.version}</name>
+              <build>
+                <assembly>
+                  <descriptorRef>artifact</descriptorRef>
+                  <targetDir>/opt/eap/standalone/deployments</targetDir>
+                </assembly>
+                <!-- requires fuse on eap Docker image -->
+                <from>fuse_eap:6.3.0</from>
+                <tags>
+                  <tag>latest</tag>
+                </tags>
+                <labels>
+                  <datetimestamp>${maven.build.timestamp}</datetimestamp>
+                  <version>${project.version}</version>
+                </labels>
+              </build>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Profiles -->
+  <profiles>
+    <!-- Seperate profiles are provided for running tests, including Arquillian tests that execute in a specified container -->
+    <profile>
+      <!-- The default profile skips all tests, though you can tune it to run just unit tests based on a custom pattern -->
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.maven.compiler.plugin}</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven.war.plugin}</version>
-                <configuration>
-                	<failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
-                <configuration>
-                    <version>${version.wildfly}</version>
-                    <serverConfig>${server.config}</serverConfig>
-                    <!-- 
-                    <username>foo</username>
-                    <password>bar</password>
-                    -->
-                </configuration>
-            </plugin>
-            <plugin>
-            	<groupId>io.fabric8</groupId>
-            	<artifactId>docker-maven-plugin</artifactId>
-            	<version>${version.docker.maven.plugin}</version>
-            	<configuration>
-                    <images>
-                        <image>
-                            <name>${project.artifactId}:${project.version}</name>
-                            <build>
-                                <assembly>
-                                    <descriptorRef>artifact</descriptorRef>
-                                    <targetDir>/opt/eap/standalone/deployments</targetDir>
-                                </assembly>
-                                <!-- requires fuse on eap Docker image -->
-                                <from>fuse_eap:6.3.0</from>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${version.maven.surefire.plugin}</version>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
         </plugins>
-    </build>
+      </build>
+    </profile>
+    <profile>
+      <!-- An optional Arquillian testing profile that executes tests in your container instance -->
+      <!-- Run with: mvn clean test -Parq-managed -->
+      <id>arq-managed</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-managed</artifactId>
+          <version>${version.wildfly.arquillian}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <!-- An optional Arquillian testing profile that executes tests in a remote container instance -->
+      <!-- Run with: mvn clean test -Parq-remote -->
+      <id>arq-remote</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-remote</artifactId>
+          <version>${version.wildfly.arquillian}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
-    <!-- Profiles -->
-    <profiles>
-        <!-- Seperate profiles are provided for running tests, including Arquillian tests that execute in a specified container -->
-        <profile>
-            <!-- The default profile skips all tests, though you can tune it to run just unit tests based on a custom pattern -->
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.maven.surefire.plugin}</version>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in your container instance -->
-            <!-- Run with: mvn clean test -Parq-managed -->
-            <id>arq-managed</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>${version.wildfly.arquillian}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in a remote container instance -->
-            <!-- Run with: mvn clean test -Parq-remote -->
-            <id>arq-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.wildfly.arquillian}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
-    <!-- Repositories -->
-    <repositories>
-        <repository>
-            <id>Maven Central</id>
-            <url>http://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>jboss-public-repository</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
+  <!-- Repositories -->
+  <repositories>
+    <repository>
+      <id>Maven Central</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>jboss-public-repository</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
 </project>
