@@ -33,7 +33,7 @@ node {
         }
         
         stage('Dependency Check') {
-          sh 'mvn -B org.owasp:dependency-check-maven:2.1.0:check'
+          sh 'mvn -B org.owasp:dependency-check-maven:3.0.1:check'
         }
 
         stage('Sonar Check') {
@@ -58,13 +58,13 @@ node {
     stage('Publish WAR') {
         withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
             sh '''curl -v -u ${USERPASS} --upload-file target/wldfly-cdi-demo.war \
-                     http://nexus:8081/repository/maven-snapshots/net/atos/wldfly-cdi-demo/${BUILD_TIMESTAMP}-SNAPSHOT/wldfly-cdi-demo-${BUILD_TIMESTAMP}-SNAPSHOT.war'''
+                     http://nexus3:8081/repository/maven-snapshots/net/atos/wldfly-cdi-demo/${BUILD_TIMESTAMP}-SNAPSHOT/wldfly-cdi-demo-${BUILD_TIMESTAMP}-SNAPSHOT.war'''
         }
     }
 
     stage('Publish Image') {
         def img = docker.image('wldfly-cdi-demo:1.0-SNAPSHOT');
-        docker.withRegistry('http://nexus:2375', 'nexus') {
+        docker.withRegistry(env.NEXUS_URL, 'nexus') {
           img.push();
         }
     }
